@@ -46,7 +46,7 @@ int main(int argc, char** argv) {
 
   sim_eval.run();
 
-  ROS_INFO("Done.");
+  RCLCPP_INFO(rclcpp::get_logger(""), "Done.");
   ros::spin();
   return 0;
 }

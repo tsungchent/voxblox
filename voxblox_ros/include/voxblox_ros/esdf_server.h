@@ -6,7 +6,7 @@
 
 #include <voxblox/core/esdf_map.h>
 #include <voxblox/integrator/esdf_integrator.h>
-#include <voxblox_msgs/Layer.h>
+#include <voxblox_msgs/msg/Layer.hpp>
 
 #include "voxblox_ros/tsdf_server.h"
 
@@ -16,7 +16,7 @@ class EsdfServer : public TsdfServer {
  public:
   EIGEN_MAKE_ALIGNED_OPERATOR_NEW
 
-  EsdfServer(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private);
+  EsdfServer(const rclcpp::NodeHandle& nh, const ros::NodeHandle& nh_private);
   EsdfServer(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private,
              const EsdfMap::Config& esdf_config,
              const EsdfIntegrator::Config& esdf_integrator_config,
@@ -79,12 +79,12 @@ class EsdfServer : public TsdfServer {
   void setupRos();
 
   /// Publish markers for visualization.
-  ros::Publisher esdf_pointcloud_pub_;
-  ros::Publisher esdf_slice_pub_;
-  ros::Publisher traversable_pub_;
+  rclcpp::Publisher esdf_pointcloud_pub_;
+  rclcpp::Publisher esdf_slice_pub_;
+  rclcpp::Publisher traversable_pub_;
 
   /// Publish the complete map for other nodes to consume.
-  ros::Publisher esdf_map_pub_;
+  rclcpp::Publisher esdf_map_pub_;
 
   /// Subscriber to subscribe to another node generating the map.
   ros::Subscriber esdf_map_sub_;

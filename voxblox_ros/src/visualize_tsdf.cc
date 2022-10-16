@@ -46,7 +46,7 @@ class SimpleTsdfVisualizer {
             "mesh_as_pointcloud", 1, true);
 
     mesh_pcl_mesh_pub_ =
-        nh_private_.advertise<pcl_msgs::PolygonMesh>("mesh_pcl", 1, true);
+        nh_private_.advertise<pcl_msgs::msg::PolygonMesh>("mesh_pcl", 1, true);
 
     ROS_DEBUG_STREAM("\tRetreiving ROS parameters...");
 
@@ -84,11 +84,11 @@ class SimpleTsdfVisualizer {
  private:
   ros::NodeHandle nh_private_;
 
-  ros::Publisher surface_pointcloud_pub_;
-  ros::Publisher tsdf_pointcloud_pub_;
-  ros::Publisher mesh_pub_;
-  ros::Publisher mesh_pointcloud_pub_;
-  ros::Publisher mesh_pcl_mesh_pub_;
+  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZRGB>> surface_pointcloud_pub_;
+  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZI>> tsdf_pointcloud_pub_;
+  rclcpp::Publisher<voxblox_msgs::msg::Mesh> mesh_pub_;
+  rclcpp::Publisher<pcl::PointCloud<pcl::PointXYZRGB>> mesh_pointcloud_pub_;
+  rclcpp::Publisher<pcl_msgs::msg::PolygonMesh> mesh_pcl_mesh_pub_;
 
   // Settings
   double tsdf_surface_distance_threshold_factor_;
@@ -149,7 +149,7 @@ void SimpleTsdfVisualizer::run(const Layer<TsdfVoxel>& tsdf_layer) {
     mesh_integrator->generateMesh(kOnlyMeshUpdatedBlocks, kClearUpdatedFlag);
 
     // Output as native voxblox mesh.
-    voxblox_msgs::Mesh mesh_msg;
+    voxblox_msgs::msg::Mesh mesh_msg;
     generateVoxbloxMeshMsg(mesh_layer, tsdf_mesh_color_mode_, &mesh_msg);
     mesh_msg.header.frame_id = tsdf_world_frame_;
     mesh_pub_.publish(mesh_msg);

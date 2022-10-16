@@ -71,7 +71,7 @@ void setVoxelWeight(const FloatingPoint weight, VoxelType* voxel);
  * 'error_layer' can be a nullptr.
  */
 template <typename VoxelType>
-FloatingPoint evaluateLayersRmse(
+inline FloatingPoint evaluateLayersRmse(
     const Layer<VoxelType>& layer_gt, const Layer<VoxelType>& layer_test,
     const VoxelEvaluationMode& voxel_evaluation_mode,
     VoxelEvaluationDetails* evaluation_result = nullptr,
@@ -189,14 +189,14 @@ FloatingPoint evaluateLayersRmse(
  * evaluate errors behind the test surface.
  */
 template <typename VoxelType>
-FloatingPoint evaluateLayersRmse(const Layer<VoxelType>& layer_gt,
+inline FloatingPoint evaluateLayersRmse(const Layer<VoxelType>& layer_gt,
                                  const Layer<VoxelType>& layer_test) {
   return evaluateLayersRmse<VoxelType>(
       layer_gt, layer_test, VoxelEvaluationMode::kIgnoreErrorBehindTestSurface);
 }
 
 template <typename VoxelType>
-VoxelEvaluationResult computeVoxelError(
+inline VoxelEvaluationResult computeVoxelError(
     const VoxelType& voxel_gt, const VoxelType& voxel_test,
     const VoxelEvaluationMode evaluation_mode, FloatingPoint* error) {
   CHECK_NOTNULL(error);

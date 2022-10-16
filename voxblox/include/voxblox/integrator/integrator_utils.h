@@ -15,6 +15,8 @@
 
 namespace voxblox {
 
+typedef unsigned int uint;
+
 /**
  * Small class that can be used by multiple threads that need mutually exclusive
  * indexes to the same array, while still covering all elements.

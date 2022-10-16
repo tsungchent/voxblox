@@ -4,6 +4,7 @@
 #include <atomic>
 #include <limits>
 #include <vector>
+#include <array>
 
 #include "voxblox/core/common.h"
 

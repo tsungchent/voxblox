@@ -1,19 +1,22 @@
 <?xml version="1.0"?>
-<package format="2">
+<package format="3">
   <name>voxblox_rviz_plugin</name>
-  <version>0.0.0</version>
+  <version>3.3.3</version>
   <description>RViz plugin for displaying incremental voxblox mesh messages.</description>
   <maintainer email="ztaylorr@ethz.ch">Zachary Taylor</maintainer>
   <license>BSD</license>
   <author>Zachary Taylor</author>
   
-  <buildtool_depend>catkin</buildtool_depend>
-  <buildtool_depend>catkin_simple</buildtool_depend>
+  <buildtool_depend>ament_cmake</buildtool_depend>
 
-  <depend>rviz</depend>
-  <depend>voxblox</depend>
-  <depend>voxblox_msgs</depend>
+  <build_depend>rviz_common</build_depend>
+  <build_depend>voxblox</build_depend>
+  <build_depend>voxblox_msgs</build_depend>
+  <build_depend>rviz_ogre_vendor</build_depend>
+
   <export>
-      <rviz plugin="${prefix}/plugin_description.xml"/>
+      <rviz2 plugin="${prefix}/plugin_description.xml"/>
+      <build_type>ament_cmake</build_type>
   </export>
+
 </package>

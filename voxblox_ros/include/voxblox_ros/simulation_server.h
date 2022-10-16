@@ -4,7 +4,8 @@
 #include <memory>
 #include <string>
 
-#include <ros/ros.h>
+// #include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 
 #include <voxblox/core/esdf_map.h>
 #include <voxblox/core/tsdf_map.h>
@@ -24,10 +25,9 @@ namespace voxblox {
 
 class SimulationServer {
  public:
-  SimulationServer(const ros::NodeHandle& nh,
-                   const ros::NodeHandle& nh_private);
+  SimulationServer(const rclcpp::Node::SharedPtr& nh);
 
-  SimulationServer(const ros::NodeHandle& nh, const ros::NodeHandle& nh_private,
+  SimulationServer(const rclcpp::Node::SharedPtr& nh, 
                    const EsdfMap::Config& esdf_config,
                    const EsdfIntegrator::Config& esdf_integrator_config,
                    const TsdfMap::Config& tsdf_config,
@@ -57,18 +57,19 @@ class SimulationServer {
   bool generatePlausibleViewpoint(FloatingPoint min_distance, Point* ray_origin,
                                   Point* ray_direction) const;
 
-  ros::NodeHandle nh_;
-  ros::NodeHandle nh_private_;
+  // ros::NodeHandle nh_;
+  // ros::NodeHandle nh_private_;
+  rclcpp::Node::SharedPtr nh_;
 
   // A bunch of publishers :)
-  ros::Publisher sim_pub_;
-  ros::Publisher tsdf_gt_pub_;
-  ros::Publisher esdf_gt_pub_;
-  ros::Publisher tsdf_gt_mesh_pub_;
-  ros::Publisher tsdf_test_pub_;
-  ros::Publisher esdf_test_pub_;
-  ros::Publisher tsdf_test_mesh_pub_;
-  ros::Publisher view_ptcloud_pub_;
+  rclcpp::Publisher::SharedPtr sim_pub_;
+  rclcpp::Publisher::SharedPtr tsdf_gt_pub_;
+  rclcpp::Publisher::SharedPtr esdf_gt_pub_;
+  rclcpp::Publisher::SharedPtr tsdf_gt_mesh_pub_;
+  rclcpp::Publisher::SharedPtr tsdf_test_pub_;
+  rclcpp::Publisher::SharedPtr esdf_test_pub_;
+  rclcpp::Publisher::SharedPtr tsdf_test_mesh_pub_;
+  rclcpp::Publisher::SharedPtr view_ptcloud_pub_;
 
   // Settings
   FloatingPoint voxel_size_;

@@ -4,11 +4,10 @@
 #include <algorithm>
 #include <string>
 
-#include <eigen_conversions/eigen_msg.h>
 #include <pcl/point_types.h>
-#include <pcl_ros/point_cloud.h>
-#include <visualization_msgs/Marker.h>
-#include <visualization_msgs/MarkerArray.h>
+// #include <pcl_ros/point_cloud.h>
+#include <visualization_msgs/msg/Marker.hpp>
+#include <visualization_msgs/msg/marker_array.hpp>
 
 #include <voxblox/core/common.h>
 #include <voxblox/core/layer.h>
@@ -133,21 +132,21 @@ void createOccupancyBlocksFromLayer(
     const Layer<VoxelType>& layer,
     const ShouldVisualizeVoxelFunctionType<VoxelType>& vis_function,
     const std::string& frame_id,
-    visualization_msgs::MarkerArray* marker_array) {
+    visualization_msgs::msg::MarkerArray* marker_array) {
   CHECK_NOTNULL(marker_array);
   // Cache layer settings.
   size_t vps = layer.voxels_per_side();
   size_t num_voxels_per_block = vps * vps * vps;
   FloatingPoint voxel_size = layer.voxel_size();
 
-  visualization_msgs::Marker block_marker;
+  visualization_msgs::msg::Marker block_marker;
   block_marker.header.frame_id = frame_id;
   block_marker.ns = "occupied_voxels";
   block_marker.id = 0;
-  block_marker.type = visualization_msgs::Marker::CUBE_LIST;
+  block_marker.type = visualization_msgs::msg::Marker::CUBE_LIST;
   block_marker.scale.x = block_marker.scale.y = block_marker.scale.z =
       voxel_size;
-  block_marker.action = visualization_msgs::Marker::ADD;
+  block_marker.action = visualization_msgs::msg::Marker::ADD;
 
   BlockIndexList blocks;
   layer.getAllAllocatedBlocks(&blocks);
@@ -159,7 +158,7 @@ void createOccupancyBlocksFromLayer(
          ++linear_index) {
       Point coord = block.computeCoordinatesFromLinearIndex(linear_index);
       if (vis_function(block.getVoxelByLinearIndex(linear_index), coord)) {
-        geometry_msgs::Point cube_center;
+        geometry_msgs::msg::Point cube_center;
         cube_center.x = coord.x();
         cube_center.y = coord.y();
         cube_center.z = coord.z();
@@ -430,7 +429,7 @@ inline void createDistancePointcloudFromEsdfLayerSlice(
 
 inline void createOccupancyBlocksFromTsdfLayer(
     const Layer<TsdfVoxel>& layer, const std::string& frame_id,
-    visualization_msgs::MarkerArray* marker_array) {
+    visualization_msgs::msg::MarkerArray* marker_array) {
   CHECK_NOTNULL(marker_array);
   createOccupancyBlocksFromLayer<TsdfVoxel>(
       layer,
@@ -441,7 +440,7 @@ inline void createOccupancyBlocksFromTsdfLayer(
 
 inline void createOccupancyBlocksFromOccupancyLayer(
     const Layer<OccupancyVoxel>& layer, const std::string& frame_id,
-    visualization_msgs::MarkerArray* marker_array) {
+    visualization_msgs::msg::MarkerArray* marker_array) {
   CHECK_NOTNULL(marker_array);
   createOccupancyBlocksFromLayer<OccupancyVoxel>(
       layer, &visualizeOccupiedOccupancyVoxels, frame_id, marker_array);

@@ -5,8 +5,7 @@
 
 namespace voxblox {
 
-EsdfServer::EsdfServer(const ros::NodeHandle& nh,
-                       const ros::NodeHandle& nh_private)
+EsdfServer::EsdfServer(const ros::NodeHandle& nh)
     : EsdfServer(nh, nh_private, getEsdfMapConfigFromRosParam(nh_private),
                  getEsdfIntegratorConfigFromRosParam(nh_private),
                  getTsdfMapConfigFromRosParam(nh_private),
@@ -14,13 +13,12 @@ EsdfServer::EsdfServer(const ros::NodeHandle& nh,
                  getMeshIntegratorConfigFromRosParam(nh_private)) {}
 
 EsdfServer::EsdfServer(const ros::NodeHandle& nh,
-                       const ros::NodeHandle& nh_private,
                        const EsdfMap::Config& esdf_config,
                        const EsdfIntegrator::Config& esdf_integrator_config,
                        const TsdfMap::Config& tsdf_config,
                        const TsdfIntegratorBase::Config& tsdf_integrator_config,
                        const MeshIntegratorConfig& mesh_config)
-    : TsdfServer(nh, nh_private, tsdf_config, tsdf_integrator_config,
+    : TsdfServer(nh, tsdf_config, tsdf_integrator_config,
                  mesh_config),
       clear_sphere_for_planning_(false),
       publish_esdf_map_(false),

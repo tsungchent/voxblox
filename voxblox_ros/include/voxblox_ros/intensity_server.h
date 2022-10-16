@@ -4,7 +4,7 @@
 #include <memory>
 
 #include <cv_bridge/cv_bridge.h>
-#include <sensor_msgs/Image.h>
+#include <sensor_msgs/msg/Image.hpp>
 
 #include <voxblox/core/voxel.h>
 #include <voxblox/integrator/intensity_integrator.h>
@@ -32,8 +32,8 @@ class IntensityServer : public TsdfServer {
   ros::Subscriber intensity_image_sub_;
 
   // Publish markers for visualization.
-  ros::Publisher intensity_pointcloud_pub_;
-  ros::Publisher intensity_mesh_pub_;
+  rclcpp::Publisher intensity_pointcloud_pub_;
+  rclcpp::Publisher intensity_mesh_pub_;
 
   /// Parameters of the incoming UNDISTORTED intensity images.
   double focal_length_px_;

@@ -45,7 +45,7 @@ esdf_pointcloud ``pcl::PointCloud<pcl::PointXYZI>``
   A pointcloud showing the values of all allocated ESDF voxels. Only appears if using ``esdf_server``.
 esdf_slice ``pcl::PointCloud<pcl::PointXYZI>``
   Outputs a 2D horizontal slice of the ESDF colored by the stored distance value. Only appears if using ``esdf_server``.
-occupied_nodes ``visualization_msgs::MarkerArray``
+occupied_nodes ``visualization_msgs::msg::MarkerArray``
   Visualizes the location of the allocated voxels in the TSDF.
 tsdf_map_out ``voxblox_msgs::Layer``
   Publishes the entire TSDF layer to update other nodes (that listen on tsdf_layer_in). Only published if ``publish_tsdf_map`` is set to true. Rate of publishing is controlled by ``publish_map_every_n_sec``.

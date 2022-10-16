@@ -4,7 +4,7 @@
 #include <OGRE/OgreManualObject.h>
 
 #include <voxblox/core/block_hash.h>
-#include <voxblox_msgs/Mesh.h>
+#include <voxblox_msgs/msg/Mesh.hpp>
 
 namespace voxblox_rviz_plugin {
 
@@ -15,7 +15,7 @@ class VoxbloxMeshVisual {
                     Ogre::SceneNode* parent_node);
   virtual ~VoxbloxMeshVisual();
 
-  void setMessage(const voxblox_msgs::Mesh::ConstPtr& msg);
+  void setMessage(voxblox_msgs::msg::Mesh::ConstSharedPtr msg);
 
   /// Set the coordinate frame pose.
   void setFramePosition(const Ogre::Vector3& position);

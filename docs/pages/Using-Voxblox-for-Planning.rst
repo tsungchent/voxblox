@@ -76,7 +76,7 @@ There's also a traversability pointcloud you can enable/disable, that if you set
     nh_private_.param("voxblox_path", input_filepath, input_filepath);
     if (!input_filepath.empty()) {
       if (!voxblox_server_.loadMap(input_filepath)) {
-        ROS_ERROR("Couldn't load ESDF map!");
+        RCLCPP_ERROR(rclcpp::get_logger(""), "Couldn't load ESDF map!");
       }
     }
     double robot_radius = 1.0;

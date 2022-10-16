@@ -1,11 +1,19 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.21)
 project(voxblox)
 
-find_package(catkin_simple REQUIRED )
-catkin_simple(ALL_DEPS_REQUIRED)
+find_package(ament_cmake REQUIRED)
+find_package(eigen_vendor REQUIRED)
+find_package(eigen_checks REQUIRED)
+find_package(gflags_vendor REQUIRED)
+find_package(glog_vendor REQUIRED)
+find_package(protobuf3_vendor REQUIRED)
+# find_package(protobuf REQUIRED)
 
 set(CMAKE_MACOSX_RPATH 0)
-add_definitions(-std=c++11 -Wall -Wextra)
+# add_definitions(-std=c++11 -Wall -Wextra)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_C_STANDARD 14)
 
 ############
 # PROTOBUF #
@@ -17,7 +25,7 @@ set(PROTO_DEFNS proto/voxblox/Block.proto
 set(BASE_PATH "proto")
 set(PROTOBUF_COMPILE_PYTHON true)
 
-PROTOBUF_CATKIN_GENERATE_CPP2(${BASE_PATH} PROTO_SRCS PROTO_HDRS ${PROTO_DEFNS})
+PROTOBUF_AMENT_GENERATE_CPP2(${BASE_PATH} PROTO_SRCS PROTO_HDRS ${PROTO_DEFNS})
 
 ####################
 # SET SOURCE FILES #
@@ -50,14 +58,36 @@ set("${PROJECT_NAME}_SRCS"
 #############
 # LIBRARIES #
 #############
-cs_add_library(${PROJECT_NAME}_proto
+add_library(${PROJECT_NAME}_proto
   ${PROTO_SRCS}
 )
 
-cs_add_library(${PROJECT_NAME}
+target_include_directories(
+  ${PROJECT_NAME}_proto PUBLIC ${CMAKE_CURRENT_BINARY_DIR}/compiled_proto ${CMAKE_INSTALL_PREFIX}/include
+)
+
+ament_target_dependencies(${PROJECT_NAME}_proto PUBLIC
+  protobuf3_vendor
+)
+
+add_library(${PROJECT_NAME}
   ${${PROJECT_NAME}_SRCS}
 )
 target_link_libraries(${PROJECT_NAME} ${PROJECT_NAME}_proto)
+
+target_include_directories(${PROJECT_NAME} PUBLIC
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:${CMAKE_INSTALL_PREFIX}/include>
+)
+
+ament_target_dependencies(
+   ${PROJECT_NAME}
+   eigen_vendor
+   eigen_checks
+   gflags_vendor
+   glog_vendor
+   protobuf3_vendor
+)
 
 ############
 # BINARIES #
@@ -85,58 +115,69 @@ add_custom_command(TARGET test_data
 
 #add_definitions(-DVISUALIZE_UNIT_TEST_RESULTS)
 
-catkin_add_gtest(test_approx_hash_array
+find_package(ament_cmake_gtest REQUIRED)
+
+ament_add_gtest(test_approx_hash_array
   test/test_approx_hash_array.cc
 )
 target_link_libraries(test_approx_hash_array ${PROJECT_NAME})
 
-catkin_add_gtest(test_tsdf_map
+ament_add_gtest(test_tsdf_map
   test/test_tsdf_map.cc
 )
 target_link_libraries(test_tsdf_map ${PROJECT_NAME})
 
-catkin_add_gtest(test_protobuf
+ament_add_gtest(test_protobuf
   test/test_protobuf.cc
 )
 target_link_libraries(test_protobuf ${PROJECT_NAME})
 
-catkin_add_gtest(test_tsdf_interpolator
+ament_add_gtest(test_tsdf_interpolator
   test/test_tsdf_interpolator.cc
 )
 target_link_libraries(test_tsdf_interpolator ${PROJECT_NAME})
 
-catkin_add_gtest(test_layer
+ament_add_gtest(test_layer
   test/test_layer.cc
 )
 target_link_libraries(test_layer ${PROJECT_NAME})
 
-catkin_add_gtest(test_merge_integration
+ament_add_gtest(test_merge_integration
   test/test_merge_integration.cc
 )
 target_link_libraries(test_merge_integration ${PROJECT_NAME})
 
-catkin_add_gtest(test_layer_utils
+ament_add_gtest(test_layer_utils
   test/test_layer_utils.cc
 )
 target_link_libraries(test_layer_utils ${PROJECT_NAME})
 
-catkin_add_gtest(test_sdf_integrators
+ament_add_gtest(test_sdf_integrators
   test/test_sdf_integrators.cc
 )
 target_link_libraries(test_sdf_integrators ${PROJECT_NAME})
 
-catkin_add_gtest(test_bucket_queue
+ament_add_gtest(test_bucket_queue
   test/test_bucket_queue.cc
 )
 target_link_libraries(test_bucket_queue ${PROJECT_NAME})
 
-catkin_add_gtest(test_clear_spheres
+ament_add_gtest(test_clear_spheres
   test/test_clear_spheres.cc
 )
 target_link_libraries(test_clear_spheres ${PROJECT_NAME})
 
+install(TARGETS ${PROJECT_NAME} EXPORT export_${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+)
+
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/
+  DESTINATION ${CMAKE_INSTALL_PREFIX}/include
+)
+
 ##########
 # EXPORT #
 ##########
-cs_install()
-cs_export(INCLUDE_DIRS ${CATKIN_DEVEL_PREFIX}/include)
+ament_package()
